@@ -32,6 +32,15 @@ def format_phone(Phone):
     return "(" + area + ")" + middle + "-" + end 
 
 
+# def get_name_parts(full_name):
+#     first, last = full_name.split()
+#     return first, last
+
+# first_name, last_name = get_name_parts("Billy Bob")
+# print(first_name)  # Billy
+# print(last_name)   # Bob
+
+
 
 #Mileage Function
 
