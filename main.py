@@ -18,22 +18,16 @@ import FormatValues as FV
 # Here are CONSTANTS
 #=================
 
-with open('Policies.dat', 'r') as f:
+# this is reading the default file 
+with open('Defaults.dat', 'r') as f:
  
  POLNUM = int(f.readline())
- 
- PROCFEE = float(f.readline()) 
-
+ PROCFEE = float(f.readline())
  HST_RATE = float(f.readline())          
-
  BASICPREM = float(f.readline())
-
  DISCOUNT = float(f.readline())
-
  LIAB = float(f.readline())
-
  GLASS = float(f.readline()) 
-
  LOANER = float(f.readline())
 
 #=================
@@ -51,35 +45,36 @@ Lname = input("Enter Your Last Name : ").title()
 Address = input("Enter Your Address : ").title()
 City = input("Enter Your City : ").title()
 
+Postal = input("Enter Postal Code (Ex) X9X 9X9 : ")
+Phone = input("Enter Phone Number (10 digit): ")
+PolicyDate = datetime.datetime.now().strftime("%Y-%m-%d")
+
+NumCars = input("Enter Number of cars youd like to insure: ")
+NumCars = int(NumCars)
+
+Extra_Li = input("Would you like to add Extra Liability (Y/N) ")
+
+GlassCover = input("Add Glass Coverage ? : (Y?N) ")
+
+LoanerCar = input("Do you require a loaner car? (Y/N) : ")
+
+
+# PRov validations 
 
 while True: 
-
-   Prov = input("Enter Province ( X,X ) ").upper()
-   if Prov in VALID_PAYMENT_TYPE:
+   Prov = input("Enter Province (XX) ").upper()
+   if Prov in VALID_PROVINCES:
       break
    else:
       print("Invalid province. Please enter a valid 2-letter code. ")
+#Payment Type Validations Here
 
-
-   Postal = input("Enter Postal Code (Ex) X9X 9X9 : ")
-   Phone = input("Enter Phone Number (10 digit): ")
-   PolicyDate = datetime.datetime.now().strftime("%Y-%m-%d")
-
-   NumCars = input("Enter Number of cars youd like to insure: ")
-
-   Extra_Li = input("Would you like to add Extra Liability (Y/N) ")
-   GlassCover = input("Add Glass Coverage ? : (Y?N) ")
-   LoanerCar = input("Do you require a loaner car? (Y/N) : ")
-   
-   while True:
-      PayType = input("Enter Your Payment Type: (FULL / MONTHLY / DOWN PAY )").title()
-      if PayType in VALID_PAYMENT_TYPE:
-         break
-      else:
-         print("Invalid Pay Type. Try Again")
-
-
-
+while True:
+   PayType = input("Enter Your Payment Type: (FULL / MONTHLY / DOWN PAY )").title()
+   if PayType in VALID_PAYMENT_TYPE:
+      break
+   else:
+      print("Invalid Pay Type. Try Again")
 
 #=================
 # Here are Calculations
@@ -89,70 +84,90 @@ while True:
 
 InsurancePrem = BASICPREM * NumCars 
 
-#Discount for additional cars after first one 
+#Discount for additional cars after first one here
 
-if NumCars > 1:
-   InsurancePrem -= (BASICPREM * DISCOUNT) * (NumCars - 1)
+if NumCars == 1:
+   InsurancePrem = BASICPREM
+else:
+   InsurancePrem = BASICPREM + (NumCars - 1) *(BASICPREM * (1 - DISCOUNT))
 
-   #Calculate Cost Of Option Costs 
+# Extra Cost Calc Here .. This Starts With 0 Here
 
-   ExtraCost = 0 
+ExtraCost = 0 
 
-   # Cost Will start at 0 for this variable 
+# Boolean value will hav eto be validated with y/n value
+Extra_Li = Extra_Li.upper() == "Y"
+GlassCover = GlassCover.upper() == "Y"
+LoanerCar = LoanerCar.upper() == "Y"
 
-   if Extra_Li:
-      ExtraCost += LIAB * NumCars # This was tricky... cost applies per car 
-   if GlassCover:
-      Extra =+ GLASS * NumCars
-   if LoanerCar:
-      ExtraCost += LOANER * NumCars # loaner Car covereage 
+# Extra Cov Cost Validation Here 
 
-   
-   #Adding up insurance and optional cost 
-   TotalPrem = InsurancePrem + ExtraCost
+if Extra_Li:
+ ExtraCost += LIAB * NumCars
 
-   #Tax calc here 
-   HST = TotalPrem * HST_RATE
+if GlassCover:
+ ExtraCost += GLASS * NumCars
 
-   #Adding tax to total 
-   TotalCost = TotalPrem * HST 
+if LoanerCar:
+ ExtraCost += LOANER * NumCars
 
-   #Monnth Pay will only apply if the customer types " Monthly "
-   if PayType == "Monthly":
-      #Over 8 months 
-    MonthlyPayment = (TotalCost + PROCFEE) / 8 
-   else:
-      MonthlyPayment = 0 # if not appliciable for full / down pay 
 
+#ptional cost 
+TotalPrem = InsurancePrem + ExtraCost
+
+#Tax calc here 
+HST = TotalPrem * HST_RATE
+TotalCost = TotalPrem + HST 
+
+if PayType == "Monthly":
+ MonthlyPayment = (TotalCost + PROCFEE) / 8
+
+else:
+ MonthlyPayment = 0
       
+# Helping the boolean have a nicer output as yes or no 
 
+Extra_LiPrint = "Yes" if Extra_Li else  "no"
+GlassPrint = "Yes" if GlassCover else  "no"
+LoanerPrint = "Yes" if LoanerCar else  "no"
 #=================
 # Here are Output
 #=================
 
+print()
+print()
+print()
+print()
+print("===================Policy Summary=======================")
 
-print("===================Poicy Summary=======================")
-
-print(f" Policy #:                                        ",  POLNUM)
-print(f" Customer Name :                                  ",  Fname , Lname)
-print(f" Address :                                        ",  Address + ",", City + ",", Prov + ",", Postal )
+print(f" Policy #:                                           {POLNUM}")
+print(f" Customer Name :                                   {Fname} {Lname}")
+print(f" Address :               ",  Address + ",", City + ",", Prov + ",", Postal )
 print(f" Phone :                                          ",  Phone)
 print(f" Policy Date :                                    ",  PolicyDate )
 print(f" Number Of Cars :                                 ",  NumCars )
-print(f" Extra Liability :                                {----}")
-print(f" Glass Coverage :                                 {----}")
-print(f" Loaner Car Coverage :                            {----}")
+print(f" Extra Liability :                                 {Extra_LiPrint}")
+print(f" Glass Coverage :                                  {GlassPrint}")
+print(f" Loaner Car Coverage :                             {LoanerPrint}")
 print(f" Payment Type :                                   ",  PayType )
 print(f" Total Premium :                                  ",  TotalPrem )
 print(f" HST :                                            ",  HST )
 print(f" Total Cost :                                     ",  TotalCost )
 
-
+print()
+print()
+print()
 
 if PayType == "Monthly":
-   print(f"Monthly Payment (8x) : {{FV.FDollarr2{MonthlyPayment}")
+   print(f"Monthly Payment (8x): {FV.FDollarr2(MonthlyPayment)}")
  
 
+#append, this is needed to add entry into the policy data
+
+with open("Policies.dat","a") as f: 
+   f.write(f"{POLNUM},{PolicyDate},{Fname},{Lname},{Address},{City},{Prov},{Postal},{Phone},\n")
+   f.write(f"{NumCars},{Extra_LiPrint},{GlassPrint},{LoanerPrint},{PayType}\n")
+   f.write(f"{TotalPrem:.2f},{HST:.2f},{TotalCost:.2f},{MonthlyPayment:.2f}\n")
 
 
 #=================
@@ -160,25 +175,11 @@ if PayType == "Monthly":
 #=================
 
 
- 
-
-
-
-
-
-
+POLNUM += 1 
+with open("Defaults.dat","w") as f:
+   f.write(f"{POLNUM}\n")
+   f.write(f"{BASICPREM}\n{DISCOUNT}\n{LIAB}\n{GLASS}\n{LOANER}\n{HST_RATE}\n{PROCFEE}")
 
 #=================
-# Here are Outputs
+# Here Data Is Written To Policies 
 #=================
-
-with open('Policies.dat', 'w') as f:
-    f.write(f"{POLNUM}\n")
-    f.write(f"{PROCFEE}\n")
-    f.write(f"{HST_RATE}\n")
-    f.write(f"{BASICPREM}\n")
-    f.write(f"{DISCOUNT}\n")
-    f.write(f"{LIAB}\n")
-    f.write(f"{GLASS}\n")
-    f.write(f"{LOANER}\n")
-    
