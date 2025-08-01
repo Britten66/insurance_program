@@ -165,7 +165,7 @@ while True:
     print("===================Policy Summary=======================")
     print(f"{'Policy #':<30}{POLNUM:>26}")
     print(f"{'Customer Name:':<30}           {Fname} {Lname}")
-    print(f"{'Policy Date:':<30}{PolicyDate:>26}")
+    print(f"{'Policy Date:':<30}{PolicyDate:>22}")
     print(f"{'Address :':<30} {Address},{City},{Prov},{Postal}")
     print(f"{'Phone :':<30}           {FormattedPhone}")
     print(f"{'Number Of Cars :':<30}{NumCars:>26}")
@@ -173,7 +173,7 @@ while True:
     print(f"{'Glass Coverage :':<30}{GlassPrint:>26}")
     print(f"{'Loaner Car Coverage :':<30}{LoanerPrint:>26}")
     print(f"{'Payment Type :':<30}{PayType:>26}")
-    # Put this if right in my output statments .. did not think of it as an issue bruno
+   
     if PayType == "Down Pay":
         print(f"{'Down Payment:':<30}{FV.FDollar2(DownPayment):>26}")
     print(f"{'Total Premium :':<30}{TotalPrem:>26}")
