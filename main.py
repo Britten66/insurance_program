@@ -48,23 +48,32 @@ while True:
 
     print(" ======= New Insurance Policy ======== ")
     Fname = input("Enter Your First Name : ").title()
+    print(" ==================================== ")
     Lname = input("Enter Your Last Name : ").title()
+    print(" ==================================== ")
     Address = input("Enter Your Address : ").title()
+    print(" ==================================== ")
     City = input("Enter Your City : ").title()
-
+    print(" ==================================== ")
     Postal = input("Enter Postal Code (Ex) X9X 9X9 : ").upper()
+    print(" ==================================== ")
     Phone = input("Enter Phone Number (10 digit): ")
+    print(" ==================================== ")
     FormattedPhone = FV.format_phone(Phone)
     PolicyDate = datetime.datetime.now().strftime("%Y-%m-%d")
-
+   
     NumCars = input("Enter Number of cars youd like to insure: ")
+    print(" ==================================== ")
     NumCars = int(NumCars)
 
     Extra_Li = input("Would you like to add Extra Liability (Y/N) ")
+    print(" ==================================== ")
 
     GlassCover = input("Add Glass Coverage ? : (Y/N) ")
+    print(" ==================================== ")
 
     LoanerCar = input("Do you require a loaner car? (Y/N) : ")
+    print(" ==================================== ")
 
  #=====
  # Claim Lists Are Started Here
@@ -171,12 +180,21 @@ while True:
     print()
     print()
 
-    print("===================Policy Summary=======================")
-    print(f"{'Policy #':<30}{POLNUM:>26}")
-    print(f"{'Customer Name:':<30}           {Fname} {Lname}")
-    print(f"{'Policy Date:':<30}{PolicyDate:>22}")
-    print(f"{'Address :':<30} {Address},{City},{Prov},{Postal}")
-    print(f"{'Phone :':<30}           {FormattedPhone}")
+    print("===============One Stop Insurance Policy================")
+    print("===================Have a Great Day=====================")
+    print()
+    print("======================================================== ")
+    print(f"{'Policy Number #':<30}{POLNUM:>26}")
+    print(f"{'Policy Date:':<30}{PolicyDate:>26}")
+    print("======================================================== ")
+    print()
+    print(f"{'Customer Name & Address:':<30}     {Fname} {Lname}")
+    print(f"                             {Address},{City}")
+    print(f"                             {Prov},{Postal}")
+    print(f"{'Phone :':<30}         {FormattedPhone}")
+    print("======================================================== ")
+  
+    
     print(f"{'Number Of Cars :':<30}{NumCars:>26}")
     print(f"{'Extra Liability :':<30}{Extra_LiPrint:>26}")
     print(f"{'Glass Coverage :':<30}{GlassPrint:>26}")
@@ -185,13 +203,15 @@ while True:
    
     if PayType == "Down Pay":
         print(f"{'Down Payment:':<30}{FV.FDollar2(DownPayment):>26}")
-    print(f"{'Total Premium :':<30}{TotalPrem:>26}")
-    print(f"{'HST :':<30}{HST:>26}")
-    print(f"{'Total Cost :':<30}{TotalCost:>26}")
-    print(f"{'FIRST PAYMENT DATE:':<30}{FV.first_payment_date():>26}")
+    print("======================================================== ")
+    print(f"{'Total Premium :':<30}{FV.FDollar2(TotalPrem):>26}")
+    print(f"{'HST :':<30}{FV.FDollar2(HST):>26}")
+    print(f"{'Total Cost :':<30}{FV.FDollar2(TotalCost):>26}")
+    print("======================================================== ")
+    print(f"{'FIRST PAYMENT DATE:':<30}{FV.first_payment_date():>16}")
+    print("======================================================== ")
     print()
-    print()
-    print()
+    
 
 # =================
 # Previous Claim Output Here
@@ -201,11 +221,13 @@ while True:
     while True:
 
         ClaimNumber = input("Enter Previous Claim Number (Enter END To Quit) ").upper()
-
+        print(" ============================================ ")    
         if ClaimNumber == "END":
             break
         ClaimDateEntry = input("Enter The Claim Date(YYYY-MM-DD) ")
+        print(" ============================================ ")    
         ClaimAmount = input("Enter Claim Amount $ ")
+        print(" ============================================ ")    
         ClaimAmount = float(ClaimAmount)
 
         ClaimNum.append(ClaimNumber)
@@ -213,7 +235,7 @@ while True:
         ClaimAmt.append(ClaimAmount)
 
         print()
-        print("===============Claim Summary=====================")
+        print("===================Claim Summary=================")
         print()
         print("      Claim #      Claim Date     Amount")
         print("     --------------------------------------")
@@ -241,7 +263,7 @@ while True:
          for i in range(len(ClaimNum)):
             f.write( f"{POLNUM},{ClaimNum[i]},{ClaimDate[i]},{FV.FDollar2(ClaimAmt[i])}\n")
           
-            
+            #Making this write to one line \n
 # =================
 # Housekeeping
 # =================
