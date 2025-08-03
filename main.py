@@ -7,7 +7,7 @@
 
 # The Program Will store the data in 3 files created for seperate entries.
 
-#Claim Data, Policy Data & The Default ( constant ) data .
+# Claim Data, Policy Data & The Default ( constant ) data .
 
 # =================
 # Here are imports
@@ -39,10 +39,10 @@ while True:
     # Here are Inputs
     # =================
 
-    # Clears the screen 
-    os.system("cls" if os.name == "nt" else "clear") 
+    # Clears the screen
+    os.system("cls" if os.name == "nt" else "clear")
 
-    VALID_PROVINCES = ["NL","NS","NB","PE","QC","ON","MB", "SK", "AB","BC","YT","NT", "NU",]
+    VALID_PROVINCES = ["NL","NS","NB","PE","QC","ON","MB","SK","AB","BC","YT","NT","NU",]
 
     VALID_PAYMENT_TYPE = ["Full", "Monthly", "Down Pay"]
 
@@ -61,7 +61,7 @@ while True:
     print(" ==================================== ")
     FormattedPhone = FV.format_phone(Phone)
     PolicyDate = datetime.datetime.now().strftime("%Y-%m-%d")
-   
+
     NumCars = input("Enter Number of cars youd like to insure: ")
     print(" ==================================== ")
     NumCars = int(NumCars)
@@ -69,23 +69,23 @@ while True:
     Extra_Li = input("Would you like to add Extra Liability (Y/N) ")
     print(" ==================================== ")
 
-    GlassCover = input("Add Glass Coverage ? : (Y/N) ")
+    GlassCover = input("Add Glass Coverage (Y/N) ")
     print(" ==================================== ")
 
-    LoanerCar = input("Do you require a loaner car? (Y/N) : ")
+    LoanerCar = input("Do you require a loaner car (Y/N) : ")
     print(" ==================================== ")
 
- #=====
- # Claim Lists Are Started Here
- #======  
-
+    # =====
+    # Claim Lists Are Started Here
+    # ======
+    # This was tricky// ended up adding claim.dat and writing blank lists to iniiate
     ClaimNum = []
     ClaimDate = []
     ClaimAmt = []
 
-#======
-# PRov validations
-#======
+    # ======
+    # PRov validations
+    # ======
 
     while True:
         Prov = input("Enter Province (XX) ").upper()
@@ -93,9 +93,9 @@ while True:
             break
         else:
             print("Invalid province. Please enter a valid 2-letter code. ")
-#======
-# Payment Type Validations Here
-#======
+    # ======
+    # Payment Type Validations Here
+    # ======
 
     DownPayment = 0
     MonthlyPayment = 0
@@ -107,9 +107,9 @@ while True:
         else:
             print("Invalid Pay Type. Try Again")
 
-# =================
-# Here are Calculations
-# =================
+    # =================
+    # Here are Calculations
+    # =================
 
     # Base Prem Calculations
 
@@ -136,7 +136,6 @@ while True:
     # Extra Cov Cost Validation Here
     # =================
 
-
     if Extra_Li:
         ExtraCost += LIAB * NumCars
 
@@ -146,7 +145,6 @@ while True:
     if LoanerCar:
         ExtraCost += LOANER * NumCars
 
-   
     TotalPrem = InsurancePrem + ExtraCost
 
     # Tax calc here
@@ -171,9 +169,9 @@ while True:
     GlassPrint = "Yes" if GlassCover else "no"
     LoanerPrint = "Yes" if LoanerCar else "no"
 
-# =================
-# Here is Print Output
-# =================
+    # =================
+    # Here is Print Output
+    # =================
 
     print()
     print()
@@ -193,14 +191,13 @@ while True:
     print(f"                             {Prov},{Postal}")
     print(f"{'Phone :':<30}         {FormattedPhone}")
     print("======================================================== ")
-  
-    
+
     print(f"{'Number Of Cars :':<30}{NumCars:>26}")
     print(f"{'Extra Liability :':<30}{Extra_LiPrint:>26}")
     print(f"{'Glass Coverage :':<30}{GlassPrint:>26}")
     print(f"{'Loaner Car Coverage :':<30}{LoanerPrint:>26}")
     print(f"{'Payment Type :':<30}{PayType:>26}")
-   
+
     if PayType == "Down Pay":
         print(f"{'Down Payment:':<30}{FV.FDollar2(DownPayment):>26}")
     print("======================================================== ")
@@ -211,23 +208,21 @@ while True:
     print(f"{'FIRST PAYMENT DATE:':<30}{FV.first_payment_date():>16}")
     print("======================================================== ")
     print()
-    
 
-# =================
-# Previous Claim Output Here
-# =================
+    # =================
+    # Previous Claim Output Here
+    # =================
 
-   
     while True:
 
         ClaimNumber = input("Enter Previous Claim Number (Enter END To Quit) ").upper()
-        print(" ============================================ ")    
+        print("         ============================================ ")
         if ClaimNumber == "END":
             break
         ClaimDateEntry = input("Enter The Claim Date(YYYY-MM-DD) ")
-        print(" ============================================ ")    
+        print("         ============================================ ")
         ClaimAmount = input("Enter Claim Amount $ ")
-        print(" ============================================ ")    
+        print("         ============================================ ")
         ClaimAmount = float(ClaimAmount)
 
         ClaimNum.append(ClaimNumber)
@@ -239,66 +234,66 @@ while True:
         print()
         print("      Claim #      Claim Date     Amount")
         print("     --------------------------------------")
-        
 
         for i in range(len(ClaimNum)):
             print(f"{ClaimNum[i]:>10}{ClaimDate[i]:>18}{FV.FDollar2(ClaimAmt[i]):>12}")
-          
-            with open("Policies.dat", "a") as f:
-             f.write(f"{POLNUM},{PolicyDate},{Fname},{Lname},{Address},{City},{Prov},{Postal},{Phone},{NumCars},{Extra_LiPrint},{GlassPrint},{LoanerPrint},{PayType},{TotalPrem:.2f},{HST:.2f},{TotalCost:.2f},{MonthlyPayment:.2f}\n")
-
 
         if PayType == "Monthly":
             print(f"Monthly Payment (8x): {FV.FDollar2(MonthlyPayment)}")
 
         # append, this is needed to add entry into the policy data
-        
 
-      
-#=========
-# Claims Record Writing Here
-#=========
+    with open("Policies.dat", "a") as f:
+        f.write(
+            f"{POLNUM},{PolicyDate},{Fname},{Lname},{Address},{City},{Prov},{Postal},{Phone},{NumCars},{Extra_LiPrint},{GlassPrint},{LoanerPrint},{PayType},{TotalPrem:.2f},{HST:.2f},{TotalCost:.2f},{MonthlyPayment:.2f}\n"
+        )
 
-        with open("Claims.dat","a") as f:
-         for i in range(len(ClaimNum)):
-            f.write( f"{POLNUM},{ClaimNum[i]},{ClaimDate[i]},{FV.FDollar2(ClaimAmt[i])}\n")
-          
-            #Making this write to one line \n
-# =================
-# Housekeeping
-# =================
+    # =========
+    # Claims Record Writing Here
+    # =========
 
-        # Added to check & see if the program was actually writing to policies.. Carried away.. Possible
-        
-        print()
-        print()
-        print("Auto Saving.", end="", flush=True)
-        time.sleep(0.6)
-        print(".", end="", flush=True)
-        time.sleep(0.6)
-        print(".", end="", flush=True)
-        time.sleep(0.5)
-        print(".", end="", flush=True)
-        time.sleep(0.5)
-        print("Saved!", flush=True)
-        time.sleep(0.6)
-        print("Done!")
+    with open("Claims.dat", "a") as f:
+        for i in range(len(ClaimNum)):
+            f.write(
+                f"{POLNUM},{ClaimNum[i]},{ClaimDate[i]},{FV.FDollar2(ClaimAmt[i])}\n"
+            )
 
-# =================
-# Here Data Is Written To Policies
-# =================
+            # Making this write to one line \n
+    # =================
+    # Housekeeping
+    # =================
 
-        POLNUM += 1
+    # Added to check & see if the program was actually writing to policies.. Carried away.. Possible
 
-        with open("Defaults.dat", "w") as f:
-            f.write(f"{POLNUM}\n")
-            f.write(f"{PROCFEE}\n")
-            f.write(f"{HST_RATE}\n")
-            f.write(f"{BASICPREM}\n")
-            f.write(f"{DISCOUNT}\n")
-            f.write(f"{LIAB}\n")
-            f.write(f"{GLASS}\n")
-            f.write(f"{LOANER}\n")
+    print()
+    print()
+    print("Auto Saving.", end="", flush=True)
+    time.sleep(0.6)
+    print(".", end="", flush=True)
+    time.sleep(0.6)
+    print(".", end="", flush=True)
+    time.sleep(0.5)
+    print(".", end="", flush=True)
+    time.sleep(0.5)
+    print("Saved!", flush=True)
+    time.sleep(0.6)
+    print("Done!")
+
+    # =================
+    # Here Data Is Written To Policies
+    # =================
+
+    POLNUM += 1
+
+    with open("Defaults.dat", "w") as f:
+        f.write(f"{POLNUM}\n")
+        f.write(f"{PROCFEE}\n")
+        f.write(f"{HST_RATE}\n")
+        f.write(f"{BASICPREM}\n")
+        f.write(f"{DISCOUNT}\n")
+        f.write(f"{LIAB}\n")
+        f.write(f"{GLASS}\n")
+        f.write(f"{LOANER}\n")
 
     # =================
     # Here Redo will exit if N is selected
